@@ -1,0 +1,23 @@
+net_width: 25600
+
+encoder:
+    encoder_embedding_dim: 512
+    encoder_n_convs: 3
+    encoder_kernel_size: 5
+
+
+decoder:
+    n_frames_per_step: 1
+    
+    prenet_dim: 256
+    
+    attention_rnn_dim: 1024
+    attention_rnn_dropout: 0.1
+    
+    decoder_rnn_dim: 1024
+    decoder_rnn_dropout: 0.1
+    
+    attention_dim: 128
+    attention_location_n_filters: 32
+    attention_location_kernel_size: 31
+    

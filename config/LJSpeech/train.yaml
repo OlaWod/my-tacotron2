@@ -1,0 +1,23 @@
+batch_size: 64
+
+path:
+  ckpt_dir: "./output/LJSpeech/ckpt"
+  log_dir: "./output/LJSpeech/log"
+  result_dir: "./output/LJSpeech/result"
+
+optimizer:
+  betas: [0.9, 0.999]
+  eps: 0.000001
+  weight_decay: 0.000001
+  init_lr: 0.001
+  
+  restore_step: 0
+  
+  grad_clip_thresh: 1.0
+  
+step:
+  total_step: 50000
+  log_step: 100
+  val_step: 1000
+  synth_step: 5000
+  save_step: 10000
