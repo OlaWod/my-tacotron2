@@ -63,10 +63,11 @@ class Encoder(nn.Module):
          text: (batch, max_text_len)
          return: (batch, max_text_len, dim), (batch, max_text_len, lsa_dim)
         '''
-        x = self.text_emb(text)
+        x = self.text_emb(text).transpose(1, 2)
         
         for conv in self.convs:
             x = F.dropout(F.relu(conv(x)), 0.5, self.training)
+        x = x.transpose(1, 2)
 
         self.lstm.flatten_parameters()
         x, _ = self.lstm(x)
