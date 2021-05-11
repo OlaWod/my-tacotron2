@@ -24,6 +24,11 @@ python evaluate.py -p config/LJSpeech/preprocess.yaml -m config/LJSpeech/model.y
 python synthesize.py --text "has never been surpassed." --restore_step 900 -p config/LJSpeech/preprocess.yaml -m config/LJSpeech/model.yaml -t config/LJSpeech/train.yaml
 ```
 
+## Alignment
+
+alignment of step 500 - 9000:
+![](https://github.com/OlaWod/my-tacotron2/blob/master/alignment_log/alignments.gif)
+
 ## Reference
 
 https://arxiv.org/abs/1703.10135
