@@ -5,9 +5,6 @@ from torch.nn import functional as F
 
 
 class ConvNorm(nn.Module):
-    """
-    Conv1d+BatchNorm1d Module
-    """
 
     def __init__(
         self,
@@ -17,7 +14,8 @@ class ConvNorm(nn.Module):
         stride=1,
         padding=0,
         dilation=1,
-        bias=True
+        bias=True,
+        w_init_gain='linear'
     ):
         super().__init__()
 
@@ -30,13 +28,34 @@ class ConvNorm(nn.Module):
             dilation=dilation,
             bias=bias,
         )
-        self.batchnorm = nn.BatchNorm1d(out_channels)
+
+        torch.nn.init.xavier_uniform_(
+            self.conv1d.weight, gain=torch.nn.init.calculate_gain(w_init_gain))
 
     def forward(self, x):
         '''
          x: (batch, length, in_channels)
         '''
         x = self.conv1d(x)
-        x = self.batchnorm(x)
 
         return x
+
+
+class LinearNorm(nn.Module):
+    
+    def __init__(
+        self,
+        in_dim,
+        out_dim,
+        bias=True,
+        w_init_gain='linear'
+    ):
+        super().__init__()
+        self.linear_layer = torch.nn.Linear(in_dim, out_dim, bias=bias)
+
+        torch.nn.init.xavier_uniform_(
+            self.linear_layer.weight,
+            gain=torch.nn.init.calculate_gain(w_init_gain))
+
+    def forward(self, x):
+        return self.linear_layer(x)

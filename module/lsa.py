@@ -2,16 +2,18 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
+from .layers import ConvNorm, LinearNorm
+
 
 class LocationLayer(nn.Module):
     def __init__(self, attention_n_filters, attention_kernel_size, attention_dim):
         super(LocationLayer, self).__init__()
-        self.location_conv = nn.Conv1d(2, attention_n_filters,
+        self.location_conv = ConvNorm(2, attention_n_filters,
                                       kernel_size=attention_kernel_size,
                                       padding=int((attention_kernel_size - 1) / 2),
                                       bias=False)
-        self.location_dense = nn.Linear(attention_n_filters, attention_dim,
-                                         bias=False)
+        self.location_dense = LinearNorm(attention_n_filters, attention_dim,
+                                         bias=False, w_init_gain='tanh')
 
     def forward(self, attention_weights_cat):
         processed = self.location_conv(attention_weights_cat)
@@ -27,9 +29,9 @@ class LSA(nn.Module):
     def __init__(self, attention_rnn_dim, embedding_dim, attention_dim,
                  attention_location_n_filters, attention_location_kernel_size):
         super(LSA, self).__init__()
-        self.query_layer = nn.Linear(attention_rnn_dim, attention_dim,
-                                      bias=False)
-        self.w = nn.Linear(attention_dim, 1, bias=False)
+        self.query_layer = LinearNorm(attention_rnn_dim, attention_dim,
+                                      bias=False, w_init_gain='tanh')
+        self.w = LinearNorm(attention_dim, 1, bias=False)
         self.location_layer = LocationLayer(attention_location_n_filters,
                                             attention_location_kernel_size,
                                             attention_dim)

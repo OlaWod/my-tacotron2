@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from .layers import ConvNorm
+
 
 class PostNet(nn.Module):
     """
@@ -20,7 +22,7 @@ class PostNet(nn.Module):
 
         self.blocks.append(
             nn.Sequential(
-                nn.Conv1d(
+                ConvNorm(
                     n_mel_channels,
                     postnet_embedding_dim,
                     kernel_size=postnet_kernel_size,
@@ -35,7 +37,7 @@ class PostNet(nn.Module):
         for i in range(1, postnet_n_blocks - 1):
             self.blocks.append(
                 nn.Sequential(
-                    nn.Conv1d(
+                    ConvNorm(
                         postnet_embedding_dim,
                         postnet_embedding_dim,
                         kernel_size=postnet_kernel_size,
@@ -49,7 +51,7 @@ class PostNet(nn.Module):
 
         self.blocks.append(
             nn.Sequential(
-                nn.Conv1d(
+                ConvNorm(
                     postnet_embedding_dim,
                     n_mel_channels,
                     kernel_size=postnet_kernel_size,

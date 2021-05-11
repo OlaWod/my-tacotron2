@@ -6,6 +6,7 @@ import numpy as np
 
 from .prenet import Prenet
 from .lsa import LSA
+from .layers import LinearNorm
 from utils import get_mask_from_lengths
 
 
@@ -44,13 +45,13 @@ class Decoder(nn.Module):
             attention_dim, attention_location_n_filters,
             attention_location_kernel_size)
 
-        self.mel_linear = nn.Linear(
+        self.mel_linear = LinearNorm(
             self.decoder_rnn_dim + self.encoder_embedding_dim,
             self.n_mel_channels * self.n_frames_per_step)
 
-        self.gate_linear = nn.Linear(
+        self.gate_linear = LinearNorm(
             self.decoder_rnn_dim + self.encoder_embedding_dim,
-            1)
+            1, w_init_gain='sigmoid')
 
     def inference(self, memory, processed_memory):
         '''

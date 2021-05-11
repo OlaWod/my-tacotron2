@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
+from .layers import LinearNorm
+
 
 class Prenet(nn.Module):
     """
@@ -16,7 +18,7 @@ class Prenet(nn.Module):
         in_sizes = [in_dim] + sizes[:-1]
         # in_sizes = [80*1, 256], out_sizes=sizes=[256, 256]
         self.layers = nn.ModuleList(
-            [nn.Linear(in_size, out_size, bias=False)
+            [LinearNorm(in_size, out_size, bias=False)
              for (in_size, out_size) in zip(in_sizes, sizes)])
 
     def forward(self, x):
